@@ -7,7 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 
 
-@Path("/hello")
+@Path("/helloTeste")
 public class HelloWorldEndpoint {
 
 	@GET
