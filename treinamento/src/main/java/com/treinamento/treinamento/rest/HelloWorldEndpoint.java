@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.inject.Inject;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
@@ -29,19 +32,17 @@ public class HelloWorldEndpoint {
         return Response.ok("Hello from WildFly Swarm!").build();
     }
 
-    @Resource(lookup = "jboss/datasources/ExampleDS")
-    private DataSource ds;
-
     @GET
-    @Path("buscar")
-    public Connection dados() throws SQLException {
-       
-        Connection conn;
-       
-        conn = ds.getConnection();
-
-        
-        return conn;
+    @Path("teste")
+    public String get() throws NamingException, SQLException {
+        Context ctx = new InitialContext();
+        DataSource ds = (DataSource) ctx.lookup("jboss/datasources/ExampleDS"); // ExampleDS was been created automatically using the auto-detected h2 driver
+        Connection conn = ds.getConnection();
+        try {
+            return "Howdy using connection: " + conn;
+        } finally {
+            conn.close();
+        }
     }
 
 }
