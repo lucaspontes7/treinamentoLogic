@@ -1,15 +1,7 @@
 package com.treinamento.treinamento.rest;
 
-import com.treinamento.dao.TesteDAO;
-import com.treinamento.modelo.Teste;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import javax.annotation.Resource;
-import javax.inject.Inject;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -36,7 +28,7 @@ public class HelloWorldEndpoint {
     @Path("teste")
     public String get() throws NamingException, SQLException {
         Context ctx = new InitialContext();
-        DataSource ds = (DataSource) ctx.lookup("jboss/datasources/ExampleDS"); // ExampleDS was been created automatically using the auto-detected h2 driver
+        DataSource ds = (DataSource) ctx.lookup("jboss/datasources/ExampleDS");
         Connection conn = ds.getConnection();
         try {
             return "Howdy using connection: " + conn;
