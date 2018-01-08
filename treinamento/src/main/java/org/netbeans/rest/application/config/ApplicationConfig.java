@@ -29,8 +29,7 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(com.treinamento.treinamento.rest.HelloWorldEndpoint.class);
-        resources.add(com.treinamento.treinamento.rest.MyResource.class);
+        resources.add(com.treinamento.treinamento.rest.LancamentoResource.class);
     }
     
 }

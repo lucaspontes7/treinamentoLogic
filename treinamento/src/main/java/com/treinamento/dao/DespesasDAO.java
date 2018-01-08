@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.treinamento.dao;
 
 import com.treinamento.modelo.Despesas;
@@ -13,58 +8,60 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
+import javax.ejb.Stateless;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 /**
  *
  * @author Lucas
  */
-
+@Stateless
 public class DespesasDAO {
 
-    @Resource(lookup = "jboss/datasources/ExampleDS")
-    private DataSource ds;
-    private ResultSet rs;
-    private PreparedStatement stmt;
-    private Connection conn;
+    @Resource(lookup = "java:jboss/datasources/TesteDS")
+    DataSource ds;
+    Connection conn = null;
+    PreparedStatement stmt = null;
+    ResultSet rs = null;
 
-    public boolean inserir(Despesas despesas) throws SQLException {
+    public void inserirDespesas(Despesas despesas) throws SQLException {
         String SQL = "INSERT INTO TB_DESPESAS (descricao, valor, data, tipolancamento)"
                 + "values (?, ?, ?, ?) ";
-        boolean retorno = false;
         try {
             conn = ds.getConnection();
             stmt = conn.prepareStatement(SQL);
             stmt.setString(1, despesas.getDescricao());
-            stmt.setDouble(2, despesas.getValor());
-            stmt.setDate(3, despesas.getData());
+            stmt.setString(2, despesas.getValor());
+            stmt.setString(3, despesas.getData());
             stmt.setInt(4, despesas.getTipoLancamento());
             stmt.execute();
-            retorno = true;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             conn.close();
+            stmt.close();
         }
-        return retorno;
     }
 
-    public List<Despesas> selecionarTodos() throws SQLException {
-        String SQL = "SELECT * FROM TB_DESPESAS";
+    public List<Despesas> selecionarTodos() throws SQLException, NamingException {
         List<Despesas> despesasList = new ArrayList<Despesas>();
-        Despesas despesas;
+        Despesas despesas = new Despesas();
         try {
+            conn = ds.getConnection();
+            String SQL = "SELECT * FROM TB_DESPESAS";
             stmt = conn.prepareStatement(SQL);
             rs = stmt.executeQuery();
             while (rs.next()) {
                 despesas = objectFactory(rs);
                 despesasList.add(despesas);
-                despesas = null;
             }
         } catch (SQLException e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
         } finally {
             conn.close();
+            stmt.close();
+
         }
         return despesasList;
     }
@@ -73,7 +70,7 @@ public class DespesasDAO {
         Despesas despesas = null;
         try {
             despesas = new Despesas(rs.getInt("id"), rs.getString("descricao"),
-                    rs.getLong("valor"), rs.getDate("data"), rs.getInt("tipolancamento"));
+                    rs.getString("valor"), rs.getString("data"), rs.getInt("tipolancamento"));
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

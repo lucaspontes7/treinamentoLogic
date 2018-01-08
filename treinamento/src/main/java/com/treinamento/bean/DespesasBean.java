@@ -1,24 +1,29 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.treinamento.bean;
 
 import com.treinamento.dao.DespesasDAO;
 import com.treinamento.modelo.Despesas;
 import java.sql.SQLException;
+import java.util.List;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.naming.NamingException;
 
 /**
  *
  * @author Lucas
  */
+@Stateless
 public class DespesasBean {
 
-    DespesasDAO despesasDAO = new DespesasDAO();
+    @Inject
+    DespesasDAO despesasDAO;
+
+    public List<Despesas> buscarDespesas() throws SQLException, NamingException {
+        return despesasDAO.selecionarTodos();
+    }
 
     public void inserir(Despesas despesas) throws SQLException {
-        despesasDAO.inserir(despesas);
+        despesasDAO.inserirDespesas(despesas);
     }
 
 }

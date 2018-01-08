@@ -8,6 +8,7 @@ swarm:
     data-sources:
       TesteDS:
         driver-name: h2
-        connection-url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE"
+        connection-url: jdbc:h2:tcp://localhost/C:/data/treinamento;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE"
         user-name: sa
         password: 
+       

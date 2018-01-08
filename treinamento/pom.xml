@@ -29,17 +29,43 @@
     </dependencyManagement>
 
     <build>
-        <finalName>demo</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
+            
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.wildfly.swarm</groupId>
                 <artifactId>wildfly-swarm-plugin</artifactId>
                 <version>${version.wildfly.swarm}</version>
                 <executions>
                     <execution>
-                        <goals>
-                            <goal>package</goal>
-                        </goals>
+                        <id>package</id>
+                    </execution>
+                    <execution>
+                        <id>start</id>
+                        <configuration>
+                            <arguments>-Sh2</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stop</id>
                     </execution>
                 </executions>
             </plugin>
@@ -52,7 +78,7 @@
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>
-            <scope>provided</scope>
+            <type>jar</type>
         </dependency>
         <!-- WildFly Swarm Fractions -->
         <dependency>
