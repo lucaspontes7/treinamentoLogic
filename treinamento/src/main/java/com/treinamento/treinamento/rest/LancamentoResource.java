@@ -33,8 +33,7 @@ public class LancamentoResource {
     @GET
     @Path("listar")
     public List<Despesas> getLancamentos() throws NamingException, SQLException {
-        List<Despesas> lista = new ArrayList<Despesas>();
-        lista = despesasBean.buscarDespesas();
+        List<Despesas> lista = despesasBean.buscarDespesas();
         return lista;
     }
 

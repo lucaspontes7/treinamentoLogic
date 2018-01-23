@@ -24,6 +24,11 @@ public class DespesasDAO {
     Connection conn = null;
     PreparedStatement stmt = null;
     ResultSet rs = null;
+    
+    public void removerDespesas(int id){
+        String SQL = "DELETE FROM TB_DESPESAS WHERE ID = ?";
+        
+    }
 
     public void inserirDespesas(Despesas despesas) throws SQLException {
         String SQL = "INSERT INTO TB_DESPESAS (descricao, valor, data, tipolancamento)"
@@ -44,37 +49,28 @@ public class DespesasDAO {
         }
     }
 
-    public List<Despesas> selecionarTodos() throws SQLException, NamingException {
+    public List<Despesas> selecionarDespesas() throws SQLException, NamingException {
         List<Despesas> despesasList = new ArrayList<Despesas>();
-        Despesas despesas = new Despesas();
         try {
             conn = ds.getConnection();
             String SQL = "SELECT * FROM TB_DESPESAS";
             stmt = conn.prepareStatement(SQL);
             rs = stmt.executeQuery();
             while (rs.next()) {
-                despesas = objectFactory(rs);
+                Despesas despesas = new Despesas();
+                despesas.setId(rs.getInt("id"));
+                despesas.setDescricao(rs.getString("descricao"));
+                despesas.setValor(rs.getString("valor"));
+                despesas.setData(rs.getString("data"));
+                despesas.setTipoLancamento(rs.getInt("tipo_lancamento"));
                 despesasList.add(despesas);
             }
+            return despesasList;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw e;
         } finally {
             conn.close();
             stmt.close();
-
-        }
-        return despesasList;
-    }
-
-    public Despesas objectFactory(ResultSet rs) {
-        Despesas despesas = null;
-        try {
-            despesas = new Despesas(rs.getInt("id"), rs.getString("descricao"),
-                    rs.getString("valor"), rs.getString("data"), rs.getInt("tipolancamento"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            return despesas;
         }
     }
 }

@@ -1,10 +1,15 @@
 package com.treinamento.modelo;
 
+import java.io.Serializable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
 /**
  *
  * @author Lucas
  */
-public class Despesas {
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Despesas implements Serializable {
 
     private int id;
     private String descricao;
