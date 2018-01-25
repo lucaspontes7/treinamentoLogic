@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.naming.NamingException;
+import javax.ws.rs.PathParam;
 
 /**
  *
@@ -18,12 +19,32 @@ public class DespesasBean {
     @Inject
     DespesasDAO despesasDAO;
 
-    public List<Despesas> buscarDespesas() throws SQLException, NamingException {
+    public List<Despesas> buscarDespesas() throws SQLException {
         return despesasDAO.selecionarTodos();
+    }
+
+    public List<Despesas> buscarDespesasData(String data) throws SQLException {
+        return despesasDAO.selecionarPorData(data);
+    }
+
+    public List<Despesas> buscarDespesasTipoLancamento(int tipoLancamento) throws SQLException {
+        return despesasDAO.selecioarPorTipoLancamento(tipoLancamento);
+    }
+
+    public List<Despesas> buscarDespesasDescricao(String descricao) throws SQLException {
+        return despesasDAO.selecioarPorDescricao(descricao);
     }
 
     public void inserir(Despesas despesas) throws SQLException {
         despesasDAO.inserirDespesas(despesas);
+    }
+
+    public void atualizar(Despesas despesas) throws SQLException {
+        despesasDAO.atualizarDespesas(despesas);
+    }
+
+    public void remover(int id) throws SQLException, NamingException {
+        despesasDAO.removerDespesas(id);
     }
 
 }

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 /**
@@ -24,14 +23,9 @@ public class DespesasDAO {
     Connection conn = null;
     PreparedStatement stmt = null;
     ResultSet rs = null;
-    
-    public void removerDespesas(int id){
-        String SQL = "DELETE FROM TB_DESPESAS WHERE ID = ?";
-        
-    }
 
     public void inserirDespesas(Despesas despesas) throws SQLException {
-        String SQL = "INSERT INTO TB_DESPESAS (descricao, valor, data, tipolancamento)"
+        String SQL = "INSERT INTO TB_DESPESAS (descricao, valor, data, tipo_lancamento)"
                 + "values (?, ?, ?, ?) ";
         try {
             conn = ds.getConnection();
@@ -41,20 +35,80 @@ public class DespesasDAO {
             stmt.setString(3, despesas.getData());
             stmt.setInt(4, despesas.getTipoLancamento());
             stmt.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
         } finally {
             conn.close();
             stmt.close();
         }
     }
 
-    public List<Despesas> selecionarDespesas() throws SQLException, NamingException {
-        List<Despesas> despesasList = new ArrayList<Despesas>();
+    public void removerDespesas(int id) throws SQLException {
+        try {
+            String SQL = "DELETE FROM TB_DESPESAS WHERE ID = ?";
+            conn = ds.getConnection();
+            stmt = conn.prepareStatement(SQL);
+            stmt.setInt(1, id);
+            stmt.execute();
+        } finally {
+            conn.close();
+            stmt.close();
+        }
+    }
+
+    public void atualizarDespesas(Despesas despesas) throws SQLException {
         try {
             conn = ds.getConnection();
-            String SQL = "SELECT * FROM TB_DESPESAS";
+            String SQL = "UPDATE TB_DESPESAS SET DESCRICAO = ?, VALOR = ?, "
+                    + "DATA = ?, TIPO_LANCAMENTO = ? WHERE ID = ?";
             stmt = conn.prepareStatement(SQL);
+            stmt.setString(1, despesas.getDescricao());
+            stmt.setString(2, despesas.getValor());
+            stmt.setString(3, despesas.getData());
+            stmt.setInt(4, despesas.getTipoLancamento());
+            stmt.setInt(5, despesas.getId());
+            stmt.execute();
+        } finally {
+            conn.close();
+            stmt.close();
+        }
+    }
+
+    public List<Despesas> selecioarPorDescricao(String descricao) throws SQLException {
+        return selecionarDespesas(0, null, descricao);
+    }
+
+    public List<Despesas> selecioarPorTipoLancamento(int tipoLancamento) throws SQLException {
+        return selecionarDespesas(tipoLancamento, null, null);
+    }
+
+    public List<Despesas> selecionarPorData(String data) throws SQLException {
+        return selecionarDespesas(0, data, null);
+    }
+
+    public List<Despesas> selecionarTodos() throws SQLException {
+        return selecionarDespesas(0, null, null);
+    }
+
+    public List<Despesas> selecionarDespesas(int tipoLancamento, String data, String descricao) throws SQLException {
+        List<Despesas> despesasList = new ArrayList<>();
+        try {
+            conn = ds.getConnection();
+            String SQL = "SELECT * FROM TB_DESPESAS ";
+            if (tipoLancamento != 0) {
+                SQL += "WHERE TIPO_LANCAMENTO = ?";
+                stmt = conn.prepareStatement(SQL);
+                stmt.setInt(1, tipoLancamento);
+            } else if (data != null) {
+                SQL += " WHERE DATA = ?";
+                stmt = conn.prepareStatement(SQL);
+                stmt.setString(1, data);
+            } else if (descricao != null) {
+                SQL += " WHERE DESCRICAO LIKE ?";
+                stmt = conn.prepareStatement(SQL);
+                stmt.setString(1, "%" + descricao + "%");
+            } else {
+                stmt = conn.prepareStatement(SQL);
+            }
+
             rs = stmt.executeQuery();
             while (rs.next()) {
                 Despesas despesas = new Despesas();
@@ -66,11 +120,10 @@ public class DespesasDAO {
                 despesasList.add(despesas);
             }
             return despesasList;
-        } catch (SQLException e) {
-            throw e;
         } finally {
             conn.close();
             stmt.close();
         }
     }
+
 }
