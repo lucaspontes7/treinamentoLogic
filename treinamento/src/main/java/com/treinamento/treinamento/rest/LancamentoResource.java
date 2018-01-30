@@ -1,6 +1,6 @@
 package com.treinamento.treinamento.rest;
 
-import com.treinamento.bean.DespesasBean;
+import com.treinamento.local.DespesasLocal;
 import com.treinamento.modelo.Despesas;
 import java.sql.SQLException;
 import java.util.List;
@@ -23,57 +23,101 @@ import javax.ws.rs.core.Response;
 public class LancamentoResource {
 
     @EJB
-    DespesasBean despesasBean;
+    DespesasLocal despesasBean;
 
     @GET
     @Path("listar")
-    public Response getLancamentos() throws NamingException, SQLException {
+    public Response getLancamentos() throws SQLException {
         List<Despesas> lista = despesasBean.buscarDespesas();
-        return Response.status(Response.Status.ACCEPTED).entity(lista).build();
+        try {
+            if (!lista.isEmpty()) {
+                return Response.status(Response.Status.ACCEPTED).entity(lista).build();
+            } else {
+                return Response.noContent().build();
+            }
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity((e.getMessage())).build();
+        }
     }
 
     @POST
     @Path("listarPorDescricao")
-    public Response getLancamentosDescricao(Despesas despesas) throws NamingException, SQLException {
+    public Response getLancamentosDescricao(Despesas despesas) throws SQLException {
         List<Despesas> lista = despesasBean.buscarDespesasDescricao(despesas.getDescricao());
-        return Response.status(Response.Status.ACCEPTED).entity(lista).build();
+        try {
+            if (!lista.isEmpty()) {
+                return Response.status(Response.Status.ACCEPTED).entity(lista).build();
+            } else {
+                return Response.noContent().build();
+            }
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity((e.getMessage())).build();
+        }
     }
 
     @POST
     @Path("listarPorTipoLancamento")
-    public Response getLancamentosTipoLancamento(Despesas despesas) throws NamingException, SQLException {
+    public Response getLancamentosTipoLancamento(Despesas despesas) throws SQLException {
         List<Despesas> lista = despesasBean.buscarDespesasTipoLancamento(despesas.getTipoLancamento());
-        return Response.status(Response.Status.ACCEPTED).entity(lista).build();
+        try {
+            if (!lista.isEmpty()) {
+                return Response.status(Response.Status.ACCEPTED).entity(lista).build();
+            } else {
+                return Response.noContent().build();
+            }
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity((e.getMessage())).build();
+        }
     }
 
     @POST
     @Path("listarPorData")
-    public Response getLancamentosData(Despesas despesas) throws NamingException, SQLException {
+    public Response getLancamentosData(Despesas despesas) throws SQLException {
         List<Despesas> lista = despesasBean.buscarDespesasData(despesas.getData());
-        return Response.status(Response.Status.ACCEPTED).entity(lista).build();
+        try {
+            if (!lista.isEmpty()) {
+                return Response.status(Response.Status.ACCEPTED).entity(lista).build();
+            } else {
+                return Response.noContent().build();
+            }
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity((e.getMessage())).build();
+        }
 
     }
 
     @POST
     @Path("inserir")
-    public Response inserir(Despesas despesas) throws NamingException, SQLException {
-        despesasBean.inserir(despesas);
-        return Response.status(Response.Status.ACCEPTED).entity(despesas.getDescricao()).build();
+    public Response inserir(Despesas despesas) throws SQLException {
+        try {
+            despesasBean.inserir(despesas);
+            return Response.status(Response.Status.ACCEPTED).entity(despesas.getDescricao()).build();
+        } catch (SQLException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity((e.getMessage())).build();
+        }
 
     }
 
     @PUT
     @Path("atualizar")
-    public Response atualizar(Despesas despesas) throws NamingException, SQLException {
-        despesasBean.atualizar(despesas);
-        return Response.status(Response.Status.ACCEPTED).entity(despesas).build();
+    public Response atualizar(Despesas despesas) throws SQLException {
+        try {
+            despesasBean.atualizar(despesas);
+            return Response.status(Response.Status.ACCEPTED).entity(despesas).build();
+        } catch (SQLException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity((e.getMessage())).build();
+        }
 
     }
 
     @DELETE
     @Path("remover/{id}")
     public Response remover(@PathParam("id") int id) throws NamingException, SQLException {
-        despesasBean.remover(id);
-        return Response.status(Response.Status.ACCEPTED).entity(id).build();
+        try {
+            despesasBean.remover(id);
+            return Response.status(Response.Status.ACCEPTED).entity(id).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity((e.getMessage())).build();
+        }
     }
 }

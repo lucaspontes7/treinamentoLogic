@@ -88,7 +88,7 @@ public class DespesasDAO {
         return selecionarDespesas(0, null, null);
     }
 
-    public List<Despesas> selecionarDespesas(int tipoLancamento, String data, String descricao) throws SQLException {
+    private List<Despesas> selecionarDespesas(int tipoLancamento, String data, String descricao) throws SQLException {
         List<Despesas> despesasList = new ArrayList<>();
         try {
             conn = ds.getConnection();

@@ -25,6 +25,7 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
+        
         </dependencies>
     </dependencyManagement>
 
@@ -87,6 +88,23 @@
         </dependency>
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
+            <artifactId>arquillian</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <version>1.2.1.Final</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+            <version>3.1.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
             <artifactId>jpa</artifactId>
         </dependency>
         <dependency>
@@ -116,11 +134,5 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.junit</groupId>
-            <artifactId>arquillian-junit-container</artifactId>
-            <version>1.2.1.Final</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+    </dependencies> 
 </project>
