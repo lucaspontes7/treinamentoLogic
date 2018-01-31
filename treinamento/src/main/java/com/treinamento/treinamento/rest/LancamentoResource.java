@@ -5,7 +5,6 @@ import com.treinamento.modelo.Despesas;
 import java.sql.SQLException;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.naming.NamingException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
