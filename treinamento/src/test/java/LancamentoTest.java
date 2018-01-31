@@ -51,27 +51,83 @@ public class LancamentoTest {
     public void buscarDespesasTest() throws SQLException {
         List<Despesas> lista = despesasBean.buscarDespesas();
         Assert.assertNotNull(lista);
+        Assert.assertEquals(2, lista.get(0).getId());
+        Assert.assertEquals("TESTE", lista.get(0).getDescricao());
+        Assert.assertEquals("45", lista.get(0).getValor());
+        Assert.assertEquals("26/10/1994", lista.get(0).getData());
+        Assert.assertEquals(2, lista.get(0).getTipoLancamento());
 
     }
 
     @Test
     public void buscarDespesasDataTest() throws SQLException {
-        List<Despesas> lista = despesasBean.buscarDespesasData("");
+        List<Despesas> lista = despesasBean.buscarDespesasData("26/10/1994");
         Assert.assertNotNull(lista);
+        Assert.assertEquals(2, lista.get(0).getId());
+        Assert.assertEquals("Teste", lista.get(0).getDescricao());
+        Assert.assertEquals("45", lista.get(0).getValor());
+        Assert.assertEquals("26/10/1994", lista.get(0).getData());
+        Assert.assertEquals(1, lista.get(0).getTipoLancamento());
 
     }
 
     @Test
     public void buscarDespesasDescricaoTest() throws SQLException {
-        List<Despesas> lista = despesasBean.buscarDespesasDescricao("");
+        List<Despesas> lista = despesasBean.buscarDespesasDescricao("Teste3");
         Assert.assertNotNull(lista);
-
+        Assert.assertEquals("Teste3", lista.get(0).getDescricao());
+        Assert.assertEquals("45", lista.get(0).getValor());
+        Assert.assertEquals("26/10/2015", lista.get(0).getData());
+        Assert.assertEquals(2, lista.get(0).getTipoLancamento());
     }
 
     @Test
     public void buscarDespesasTipoLancamentoTest() throws SQLException {
         List<Despesas> lista = despesasBean.buscarDespesasTipoLancamento(1);
         Assert.assertNotNull(lista);
+        Assert.assertEquals("112Teste2", lista.get(0).getDescricao());
+        Assert.assertEquals("45", lista.get(0).getValor());
+        Assert.assertEquals("26/10/2018", lista.get(0).getData());
+        Assert.assertEquals(1, lista.get(0).getTipoLancamento());
 
+    }
+
+    @Test
+    public void inserirDespesas() throws SQLException {
+        Despesas despesa = new Despesas();
+        despesa.setDescricao("DespesaTeste");
+        despesa.setData("20/01/2014");
+        despesa.setValor("90");
+        despesa.setTipoLancamento(3);
+        despesasBean.inserir(despesa);
+        List<Despesas> lista = despesasBean.buscarDespesasDescricao("DespesaTeste");
+        Assert.assertNotNull(lista);
+    }
+
+    @Test
+    public void atualizarDespesas() throws SQLException {
+        Despesas despesa = new Despesas();
+        despesa.setId(1);
+        despesa.setDescricao("DespesaLucas");
+        despesa.setData("20/01/2014");
+        despesa.setValor("90");
+        despesa.setTipoLancamento(3);
+        despesasBean.inserir(despesa);
+        List<Despesas> lista = despesasBean.buscarDespesasDescricao("DespesaLucas");
+        Assert.assertNotNull(lista);
+    }
+
+    @Test
+    public void removerDespesas() throws SQLException {
+        Despesas despesa = new Despesas();
+        despesa.setId(10);
+        despesa.setDescricao("DespesaTesteExcluir");
+        despesa.setData("20/01/2014");
+        despesa.setValor("998");
+        despesa.setTipoLancamento(3);
+        despesasBean.inserir(despesa);
+        despesasBean.remover(10);
+        List<Despesas> lista = despesasBean.buscarDespesasDescricao("DespesaTesteExcluir");
+        Assert.assertTrue(lista.isEmpty());
     }
 }

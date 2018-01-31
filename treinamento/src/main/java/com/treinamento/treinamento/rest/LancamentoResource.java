@@ -29,14 +29,10 @@ public class LancamentoResource {
     @Path("listar")
     public Response getLancamentos() throws SQLException {
         List<Despesas> lista = despesasBean.buscarDespesas();
-        try {
-            if (!lista.isEmpty()) {
-                return Response.status(Response.Status.ACCEPTED).entity(lista).build();
-            } else {
-                return Response.noContent().build();
-            }
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity((e.getMessage())).build();
+        if (!lista.isEmpty()) {
+            return Response.status(Response.Status.ACCEPTED).entity(lista).build();
+        } else {
+            return Response.noContent().build();
         }
     }
 
@@ -44,44 +40,34 @@ public class LancamentoResource {
     @Path("listarPorDescricao")
     public Response getLancamentosDescricao(Despesas despesas) throws SQLException {
         List<Despesas> lista = despesasBean.buscarDespesasDescricao(despesas.getDescricao());
-        try {
-            if (!lista.isEmpty()) {
-                return Response.status(Response.Status.ACCEPTED).entity(lista).build();
-            } else {
-                return Response.noContent().build();
-            }
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity((e.getMessage())).build();
+        if (!lista.isEmpty()) {
+            return Response.status(Response.Status.ACCEPTED).entity(lista).build();
+        } else {
+            return Response.noContent().build();
         }
+
     }
 
     @POST
     @Path("listarPorTipoLancamento")
     public Response getLancamentosTipoLancamento(Despesas despesas) throws SQLException {
         List<Despesas> lista = despesasBean.buscarDespesasTipoLancamento(despesas.getTipoLancamento());
-        try {
-            if (!lista.isEmpty()) {
-                return Response.status(Response.Status.ACCEPTED).entity(lista).build();
-            } else {
-                return Response.noContent().build();
-            }
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity((e.getMessage())).build();
+        if (!lista.isEmpty()) {
+            return Response.status(Response.Status.ACCEPTED).entity(lista).build();
+        } else {
+            return Response.noContent().build();
         }
+
     }
 
     @POST
     @Path("listarPorData")
     public Response getLancamentosData(Despesas despesas) throws SQLException {
         List<Despesas> lista = despesasBean.buscarDespesasData(despesas.getData());
-        try {
-            if (!lista.isEmpty()) {
-                return Response.status(Response.Status.ACCEPTED).entity(lista).build();
-            } else {
-                return Response.noContent().build();
-            }
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity((e.getMessage())).build();
+        if (!lista.isEmpty()) {
+            return Response.status(Response.Status.ACCEPTED).entity(lista).build();
+        } else {
+            return Response.noContent().build();
         }
 
     }
@@ -112,7 +98,7 @@ public class LancamentoResource {
 
     @DELETE
     @Path("remover/{id}")
-    public Response remover(@PathParam("id") int id) throws NamingException, SQLException {
+    public Response remover(@PathParam("id") int id) throws SQLException {
         try {
             despesasBean.remover(id);
             return Response.status(Response.Status.ACCEPTED).entity(id).build();
